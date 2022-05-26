@@ -44,11 +44,13 @@ print(keras.__version__)
 
 # 6. MLP 모델 생성
 model = Sequential()
-
+drop_rate = 0.03
 model.add(Dense(20, input_dim=11, activation='relu'))
-#model.add(Dropout(0.3))
+#model.add(keras.layers.Dropout(drop_rate))
+model.add(Dense(16, activation='relu'))
+#model.add(keras.layers.Dropout(drop_rate))
 model.add(Dense(8, activation='relu'))
-#model.add(Dropout(0.5))
+#model.add(keras.layers.Dropout(drop_rate))
 model.add(Dense(1, activation='sigmoid'))
 
 print(model.summary())
@@ -60,7 +62,7 @@ model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy']
 # 6. 학습시키기
 
 batch_size = 200
-epochs = 500
+epochs = 1000
 
 history = model.fit(X_train, y_train, epochs=epochs, 
                     batch_size=batch_size, 
@@ -78,8 +80,8 @@ print(test_accuracy)
 # 10. 학습 시각화하기
 import matplotlib.pyplot as plt
 
-plt.plot(history.history['acc'])
-plt.plot(history.history['val_acc'])
+plt.plot(history.history['accuracy'])
+plt.plot(history.history['val_accuracy'])
 plt.title('Accuracy')
 plt.ylabel('epoch')
 plt.xlabel('accuracy')
