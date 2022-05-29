@@ -1,12 +1,12 @@
 # Cardioprediction
 ### cardiodisease prediction with seq model
 
-##### indicator
-##### epoch
-##### batch_size
-##### number of layer
-##### number of node
-##### layer and node combination 
+### indicator
+##### -epoch
+##### -batch_size
+##### -number of layer
+##### -number of node
+##### -layer and node combination 
 
 ##### 5/30 find adquate batch size empirically, batch_size = 200~500
 ##### there is no mathically accurate answer to adjusting number of layer,
