@@ -7,12 +7,13 @@ dataset = pd.read_csv("/Users/harrysong/Downloads/cardio/cardio_train.csv",sep="
 
 # 3. X/y 나누기
 train_list = []
-epoch_level = [250,500,750,1000]
-batch_level = [50,100,200]
-for a in range(0,len(epoch_level) * len(batch_level))
-  X = dataset.iloc[:,1:-1]
-  y = dataset.iloc[:,-1]
-  cnt = epoch_level//len(epoch_level)
+epoch_level = [500]
+batch_level = [200]
+acc_list=[]
+for a in range(0,len(batch_level)):
+  dataset_select = 70000-70000%batch_level[a]
+  X = dataset.iloc[:dataset_select,1:-1]
+  y = dataset.iloc[:dataset_select,-1]
   
 
 
@@ -51,19 +52,25 @@ for a in range(0,len(epoch_level) * len(batch_level))
   # 6. MLP 모델 생성
   model = Sequential()
   drop_rate = 0.03
-  model.add(Dense(256, input_dim=11, activation='relu'))
+  model.add(Dense(64, input_dim=11, activation='relu'))
   #model.add(keras.layers.Dropout(drop_rate))
   model.add(Dense(64, activation='relu'))
-  model.add(Dense(16, activation='relu'))
+  model.add(Dense(64, activation='relu'))
   #model.add(keras.layers.Dropout(drop_rate))
   #model.add(keras.layers.Dropout(drop_rate))
+  model.add(Dense(64, activation='relu'))
+  
+  model.add(Dense(64, activation='relu'))
+  for b in range(100):
+    model.add(Dense(64, activation='relu'))
+
   model.add(Dense(1, activation='sigmoid'))
 
   # 6-2 . early_stopping
   from keras.callbacks import EarlyStopping
   from keras.callbacks import ModelCheckpoint
   mc = ModelCheckpoint('model', monitor='accuracy', mode='max', save_best_only=True)
-  early_stopping = EarlyStopping(monitor='val_acc', min_delta = 0.0005, patience = 20,mode = 'auto')
+  earlystopping = EarlyStopping(monitor='val_loss', min_delta = 0.0003, patience = 50,mode = 'auto')
 
   print(model.summary())
 
@@ -74,20 +81,26 @@ for a in range(0,len(epoch_level) * len(batch_level))
 
   # 6. 학습시키기
 
-  batch_size = batch_level
-  epochs = epoch_level
+  batch_size = batch_level[a]
+  epochs = epoch_level[a]
 
   history = model.fit(X_train, y_train, epochs=epochs, 
                       batch_size=batch_size, 
                       validation_data=(X_val, y_val), shuffle=True, verbose=1,
-                      callbacks=[early_stopping])
+                      callbacks=[earlystopping])
                       
                       
   # 7. 모델 평가하기a
   train_accuracy = model.evaluate(X_train, y_train)
   test_accuracy = model.evaluate(X_test, y_test)
+  print("batch_zie: ",batch_size, "epochs: ", epochs)
   print(train_accuracy)
   print(test_accuracy)
+
+
+  acc_list.append(a)
+  acc_list.append(train_accuracy)
+  acc_list.append(test_accuracy)
 
   
   # 10. 학습 시각화하기
