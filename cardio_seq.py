@@ -6,6 +6,7 @@ dataset = pd.read_csv("/Users/harrysong/Downloads/cardio/cardio_train.csv",sep="
 
 
 # 3. X/y 나누기
+# 3. X/y 나누기
 train_list = []
 epoch_level = [500]
 batch_level = [200]
@@ -54,16 +55,12 @@ for a in range(0,len(batch_level)):
   drop_rate = 0.03
   model.add(Dense(64, input_dim=11, activation='relu'))
   #model.add(keras.layers.Dropout(drop_rate))
-  model.add(Dense(64, activation='relu'))
-  model.add(Dense(64, activation='relu'))
-  #model.add(keras.layers.Dropout(drop_rate))
-  #model.add(keras.layers.Dropout(drop_rate))
-  model.add(Dense(64, activation='relu'))
+  for b in range(10):
+    model.add(Dense(512, activation='relu'))
   
-  model.add(Dense(64, activation='relu'))
-  for b in range(100):
-    model.add(Dense(64, activation='relu'))
-
+  #model.add(keras.layers.Dropout(drop_rate))
+  #model.add(keras.layers.Dropout(drop_rate))
+  
   model.add(Dense(1, activation='sigmoid'))
 
   # 6-2 . early_stopping
