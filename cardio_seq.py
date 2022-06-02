@@ -15,12 +15,16 @@ for a in range(0,len(batch_level)):
   dataset_select = 70000-70000%batch_level[a]
   X = dataset.iloc[:dataset_select,1:-1]
   y = dataset.iloc[:dataset_select,-1]
-  
-
-
+  from sklearn.preprocessing import MinMaxScaler
 
   print(X.head(10))
   print(y.head(10))
+  
+  scaler = MinMaxScaler(feature_range=(0,1))
+  X = scaler.fit_transform(X)
+
+  print(X[:5])
+  print(y[:5])
 
 
   print(X.shape)
